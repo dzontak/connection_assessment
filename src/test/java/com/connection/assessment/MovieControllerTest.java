@@ -19,7 +19,7 @@ public class MovieControllerTest extends AbstractTest {
     }
 
     @Test
-    public void shouldGetAllMovies() throws Exception {
+    public void shouldGetMovies() throws Exception {
 
         String uri = "/movies";
         MvcResult mvcResult = mvc.perform(MockMvcRequestBuilders.get(uri)

@@ -35,6 +35,7 @@ public class ConnectionAssessmentApplication {
         SpringApplication.run(ConnectionAssessmentApplication.class, args);
     }
 
+    @SuppressWarnings("deprecation")
     @Bean
     @Transactional
     public CommandLineRunner loadMovieData(
@@ -45,6 +46,7 @@ public class ConnectionAssessmentApplication {
 
             File file = ResourceUtils.getFile("classpath:IMDB-Movie-Data.csv");
             Reader in = new FileReader(file.getAbsolutePath());
+
             Iterable<CSVRecord> records = CSVFormat.RFC4180.withHeader("Rank", "Title", "Genre", "Description", "Director", "Actors", "Year", "Runtime (Minutes)", "Rating", "Votes", "Revenue (Millions)", "Metascore").parse(in);
             for (CSVRecord record : records) {
 
