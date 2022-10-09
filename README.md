@@ -32,10 +32,10 @@ http://localhost:8080/api-docs
 ### Running tests
 
 ```
-./gradlew test
+/gradlew clean build
 ```
 
-### Endpoints
+## Endpoints
 
 #### READ ONE:
 
