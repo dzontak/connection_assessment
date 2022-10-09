@@ -68,7 +68,6 @@ public class ConnectionAssessmentApplication {
 
                 movie.setGenres(movieGenres);
 
-
                 String[] actors = record.get("Actors").split(",");
                 List<Actor> movieActors = new ArrayList<>();
                 for (String name : actors) {
@@ -102,7 +101,7 @@ public class ConnectionAssessmentApplication {
                 // TODO: figure out how to represent strings over 255 in H2.
                 String desc = record.get("Description");
                 if (desc.length() > 255) {
-                    desc = desc.substring(0, 254);
+                    desc = desc.substring(0, 255);
                 }
 
                 movie.setDescription(desc);
@@ -125,8 +124,6 @@ public class ConnectionAssessmentApplication {
 
             }
         };
-
     }
-
 }
 

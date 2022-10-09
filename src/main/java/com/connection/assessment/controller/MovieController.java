@@ -17,10 +17,11 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 @RestController
 //TODO: Introduce Service Layer
-@RequestMapping("/movies")
 public class MovieController {
 
     private static final Logger logger = LoggerFactory.getLogger(MovieController.class);
@@ -48,9 +49,10 @@ public class MovieController {
      *
      * @return all Movies
      */
-    @GetMapping("/")
-    Iterable<Movie> all() {
-        return movieRepository.findAll();
+    @GetMapping("/movies")
+    List<Movie> all() {
+        return StreamSupport.stream(movieRepository.findAll().spliterator(), false)
+                .collect(Collectors.toList());
     }
 
     /**
@@ -65,7 +67,7 @@ public class MovieController {
      * @param id A movie id
      * @return A movie or 404 if now found
      */
-    @GetMapping("/{id}")
+    @GetMapping("/movies/{id}")
     Movie one(@PathVariable Long id) {
         return movieRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(
@@ -84,7 +86,7 @@ public class MovieController {
      * @param genre
      * @return Returns a collection of all movies equal to the {@code genre} supplied.
      */
-    @GetMapping("/filter/{genre}")
+    @GetMapping("/movies/filter/{genre}")
     List<Movie> filterMovieByGenre(@PathVariable String genre) {
 
         Genre genreEntity = genreRepository.findByCode(genre);
@@ -107,7 +109,7 @@ public class MovieController {
      * @param movie A movie to create
      * @return A new movie that was created.
      */
-    @PostMapping("/")
+    @PostMapping("/movies")
     @ResponseStatus(HttpStatus.CREATED)
     Movie newMovie(@RequestBody Movie movie) {
 
@@ -162,7 +164,7 @@ public class MovieController {
      * @param id       a unique identifier for the movie
      * @return An updated movie
      */
-    @PatchMapping("/{id}")
+    @PatchMapping("/movies/{id}")
     Movie updateMovie(@RequestBody Movie newMovie, @PathVariable Long id) {
 
         Movie movie = this.one(id);
@@ -234,7 +236,7 @@ public class MovieController {
      *
      * @param id A unique identifier for the movie
      */
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/movies/{id}")
     void deleteMovie(@PathVariable Long id) {
         // throw 404 if movie for id does not exist.
         if (this.one(id) != null) {

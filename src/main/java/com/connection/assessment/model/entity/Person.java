@@ -5,11 +5,11 @@ import lombok.Data;
 import javax.persistence.*;
 
 @Data
-@Entity
-public class Genre {
+@MappedSuperclass
+public abstract class Person {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    @Column(unique = true, nullable = false)
-    private String code;
+    @Column(unique = true)
+    private String name;
 }

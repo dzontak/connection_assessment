@@ -27,8 +27,10 @@ public class Movie {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private Integer movieRank;
+    @Column(nullable = false)
     private String title;
     private String description;
+    @Column(nullable = false)
     private Integer releaseYear;
     private Integer runtime;
     private Double rating;
