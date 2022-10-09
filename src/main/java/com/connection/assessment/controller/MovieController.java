@@ -21,7 +21,8 @@ import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 @RestController
-//TODO: Introduce Service Layer
+// TODO: Introduce Service Layer and ModelMapper
+// https://www.javaguides.net/2021/02/spring-boot-dto-example-entity-to-dto.html
 public class MovieController {
 
     private static final Logger logger = LoggerFactory.getLogger(MovieController.class);
@@ -87,7 +88,7 @@ public class MovieController {
      * @return Returns a collection of all movies equal to the {@code genre} supplied.
      */
     @GetMapping("/movies/filter/{genre}")
-    List<Movie> filterMovieByGenre(@PathVariable String genre) {
+    List<Movie> filterByGenre(@PathVariable String genre) {
 
         Genre genreEntity = genreRepository.findByCode(genre);
         if (genreEntity == null) return new ArrayList<>();
@@ -107,44 +108,49 @@ public class MovieController {
      * Example: {"id":1,"rank" :1,"title":"Guardians of the Galaxy","genre":["Action","Adventure","Sci-Fi"],"description":"A group of intergalactic criminals are forced to work together to stop a fanatical warrior from taking control of the universe.","director":"James Gunn","actors":["Chris Pratt","Vin Diesel","Bradley Cooper","Zoe Saldana"],"year":2014,"runtime":121,"rating":8.1,"votes":757074,"revenue":333.13,"metascore":76}
      *
      * @param movie A movie to create
-     * @return A new movie that was created.
+     * @return A new movie that was created
      */
     @PostMapping("/movies")
     @ResponseStatus(HttpStatus.CREATED)
-    Movie newMovie(@RequestBody Movie movie) {
+    Movie createMovie(@RequestBody Movie movie) {
 
         logger.info("Post movie: " + movie);
-        for (int i = 0; i < movie.getGenres().size(); i++) {
-            String code = movie.getGenres().get(i).getCode();
-            Genre genre = genreRepository.findByCode(code);
-            if (genre == null) {
-                genre = new Genre();
-                genre.setCode(code);
-                genre = genreRepository.save(genre);
+        if (!CollectionUtils.isEmpty(movie.getGenres())) {
+            for (int i = 0; i < movie.getGenres().size(); i++) {
+                String code = movie.getGenres().get(i).getCode();
+                Genre genre = genreRepository.findByCode(code);
+                if (genre == null) {
+                    genre = new Genre();
+                    genre.setCode(code);
+                    genre = genreRepository.save(genre);
+                }
+                movie.getGenres().set(i, genre);
             }
-            movie.getGenres().set(i, genre);
         }
-
-        for (int i = 0; i < movie.getActors().size(); i++) {
-            String name = movie.getActors().get(i).getName();
-            Actor actor = actorRepository.findByName(name);
-            if (actor == null) {
-                actor = new Actor();
-                actor.setName(name);
-                actor = actorRepository.save(actor);
+        
+        if (!CollectionUtils.isEmpty(movie.getActors())) {
+            for (int i = 0; i < movie.getActors().size(); i++) {
+                String name = movie.getActors().get(i).getName();
+                Actor actor = actorRepository.findByName(name);
+                if (actor == null) {
+                    actor = new Actor();
+                    actor.setName(name);
+                    actor = actorRepository.save(actor);
+                }
+                movie.getActors().set(i, actor);
             }
-            movie.getActors().set(i, actor);
         }
 
-
-        String directorName = movie.getDirector().getName();
-        Director director = directorRepository.findByName(directorName);
-        if (director == null) {
-            director = new Director();
-            director.setName(directorName);
-            director = directorRepository.save(director);
+        if (movie.getDirector() != null) {
+            String directorName = movie.getDirector().getName();
+            Director director = directorRepository.findByName(directorName);
+            if (director == null) {
+                director = new Director();
+                director.setName(directorName);
+                director = directorRepository.save(director);
+            }
+            movie.setDirector(director);
         }
-        movie.setDirector(director);
 
         return movieRepository.save(movie);
     }
@@ -228,7 +234,7 @@ public class MovieController {
 
     /**
      * Request:
-     * URL: /movies/{id}:
+     * URL: /movies/{id}
      * Method: DELETE
      * Response:
      * The response code is 200.

@@ -39,6 +39,6 @@ public class Movie {
     private Integer metaScore;
 
     @ManyToOne
-    @JoinColumn(name = "director_id", nullable = false)
+    @JoinColumn(name = "director_id", nullable = true, foreignKey = @javax.persistence.ForeignKey(name = "none"))
     private Director director;
 }

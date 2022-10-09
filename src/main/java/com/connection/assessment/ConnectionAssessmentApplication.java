@@ -50,6 +50,7 @@ public class ConnectionAssessmentApplication {
 
                 Movie movie = new Movie();
 
+                // skip the header row
                 String rank = record.get("Rank");
                 if (rank.equals("Rank")) continue;
 
@@ -61,7 +62,7 @@ public class ConnectionAssessmentApplication {
                         genre = new Genre();
                         genre.setCode(genreCode);
                         genre = genreRepository.save(genre);
-                        logger.info("Saved genre: " + genre);
+                        logger.debug("Saved genre: " + genre);
                     }
                     movieGenres.add(genre);
                 }
@@ -76,7 +77,7 @@ public class ConnectionAssessmentApplication {
                         actor = new Actor();
                         actor.setName(name);
                         actor = actorRepository.save(actor);
-                        logger.info("actor: " + actor);
+                        logger.debug("actor: " + actor);
                     }
                     movieActors.add(actor);
                 }
@@ -89,7 +90,7 @@ public class ConnectionAssessmentApplication {
                     director = new Director();
                     director.setName(directorName);
                     director = directorRepository.save(director);
-                    logger.info("Saved director " + director);
+                    logger.debug("Saved director " + director);
                 }
                 movie.setDirector(director);
 
@@ -118,10 +119,7 @@ public class ConnectionAssessmentApplication {
 
                 movieRepository.save(movie);
 
-                logger.info("Saved Movie *********************: " + movie.getTitle());
-
-                //logger.info("Retrieve movie just created: " + movieRepository.findByTitleAndReleaseYear(movie.getTitle(), movie.getReleaseYear()));
-
+                logger.debug("Saved Movie *********************: " + movie);
             }
         };
     }

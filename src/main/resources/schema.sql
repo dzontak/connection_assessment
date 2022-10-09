@@ -1,14 +1,12 @@
-DROP TABLE IF EXISTS director;
-CREATE TABLE director
+--SET FOREIGN_KEY_CHECKS = 0;
+CREATE TABLE IF NOT EXISTS director
 (
     id   BIGINT      NOT NULL AUTO_INCREMENT,
     name VARCHAR(50) NOT NULL,
     PRIMARY KEY (id)
 );
 
-
-DROP TABLE IF EXISTS movie;
-CREATE TABLE movie
+CREATE TABLE IF NOT EXISTS movie
 (
     id           BIGINT       NOT NULL AUTO_INCREMENT,
     movie_rank   SMALLINT,
@@ -25,17 +23,14 @@ CREATE TABLE movie
     FOREIGN KEY (director_id) REFERENCES director (id)
     );
 
-
-DROP TABLE IF EXISTS genre;
-CREATE TABLE genre
+CREATE TABLE IF NOT EXISTS genre
 (
     id   BIGINT      NOT NULL AUTO_INCREMENT,
     code VARCHAR(50) NOT NULL,
     PRIMARY KEY (id)
 );
 
-DROP TABLE IF EXISTS movie_genre;
-CREATE TABLE movie_genre
+CREATE TABLE IF NOT EXISTS movie_genre
 (
     id       BIGINT NOT NULL AUTO_INCREMENT,
     movie_Id BIGINT NOT NULL,
@@ -45,17 +40,14 @@ CREATE TABLE movie_genre
     FOREIGN KEY (movie_Id) REFERENCES movie (id)
 );
 
-
-DROP TABLE IF EXISTS actor;
-CREATE TABLE actor
+CREATE TABLE IF NOT EXISTS actor
 (
     id   BIGINT      NOT NULL AUTO_INCREMENT,
     name VARCHAR(50) NOT NULL,
     PRIMARY KEY (id)
 );
 
-DROP TABLE IF EXISTS movie_actor;
-CREATE TABLE movie_actor
+CREATE TABLE IF NOT EXISTS movie_actor
 (
     id       BIGINT NOT NULL AUTO_INCREMENT,
     actor_id BIGINT NOT NULL,
