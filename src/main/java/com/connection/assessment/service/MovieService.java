@@ -84,7 +84,7 @@ public class MovieService {
      */
     public Movie updateMovie(Movie newMovie, Long id) {
         Movie movie = this.getMovie(id);
-        logger.info("Patch movie with id " + id + " " + newMovie);
+        logger.info("Updating movie with id " + id + " " + newMovie);
 
         // overwrite genres
         if (!CollectionUtils.isEmpty(newMovie.getGenres())) {
@@ -149,13 +149,24 @@ public class MovieService {
      * @throws ResponseStatusException if movie is not found for the id
      */
     public Movie getMovie(Long id) {
-        return movieRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "entity not found for id: " + id));
+        return movieRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Movie not found for id: " + id));
     }
 
+    /**
+     * Get all movies
+     *
+     * @return all movies
+     */
     public Iterable<Movie> getMovies() {
         return movieRepository.findAll();
     }
 
+    /**
+     * Gets all movies that have an association to the {@code genre}
+     *
+     * @param genre A gunre, case sensative, for example Horror, Action, Drama
+     * @return A list of movies that belong to the genre.
+     */
     public List<Movie> getMovieForGenre(String genre) {
         Genre genreEntity = genreRepository.findByCode(genre);
         if (genreEntity == null) return new ArrayList<>();
