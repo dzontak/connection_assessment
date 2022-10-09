@@ -7,8 +7,8 @@ CREATE TABLE director
 );
 
 
-DROP TABLE IF EXISTS Movie;
-CREATE TABLE Movie
+DROP TABLE IF EXISTS movie;
+CREATE TABLE movie
 (
     id           BIGINT       NOT NULL AUTO_INCREMENT,
     movie_rank   SMALLINT,
@@ -41,8 +41,8 @@ CREATE TABLE movie_genre
     movie_Id BIGINT NOT NULL,
     genre_Id BIGINT NOT NULL,
     PRIMARY KEY (id),
-    FOREIGN KEY (genre_Id) REFERENCES Genre (id),
-    FOREIGN KEY (movie_Id) REFERENCES Movie (id)
+    FOREIGN KEY (genre_Id) REFERENCES genre (id),
+    FOREIGN KEY (movie_Id) REFERENCES movie (id)
 );
 
 
