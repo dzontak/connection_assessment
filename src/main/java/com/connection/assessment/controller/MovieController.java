@@ -2,6 +2,12 @@ package com.connection.assessment.controller;
 
 import com.connection.assessment.model.entity.Movie;
 import com.connection.assessment.service.MovieService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,8 +17,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-// TODO: Introduce Service Layer and ModelMapper
-// https://www.javaguides.net/2021/02/spring-boot-dto-example-entity-to-dto.html
 public class MovieController {
 
     private static final Logger logger = LoggerFactory.getLogger(MovieController.class);
@@ -30,6 +34,9 @@ public class MovieController {
      *
      * @return all Movies
      */
+
+    @Operation(summary = "Get all movies")
+    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Found movies", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = Movie.class))})})
     @GetMapping("/movies")
     Iterable<Movie> getMovies() {
         return movieService.getMovies();
@@ -47,8 +54,10 @@ public class MovieController {
      * @param id A movie id
      * @return A movie or 404 if now found
      */
+    @Operation(summary = "Get a movie by id")
+    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Found a Movie", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = Movie.class))}), @ApiResponse(responseCode = "404", description = "Movie not found", content = @Content)})
     @GetMapping("/movies/{id}")
-    Movie one(@PathVariable Long id) {
+    Movie one(@Parameter(description = "id of movie to be searched") @PathVariable Long id) {
         return movieService.getMovie(id);
     }
 
@@ -64,9 +73,10 @@ public class MovieController {
      * @return Returns a collection of all movies equal to the {@code genre} supplied.
      */
     @GetMapping("/movies/filter/{genre}")
-    List<Movie> getMovieForGenre(@PathVariable String genre) {
+    @Operation(summary = "Get movies for a genre")
+    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Found movies in genre", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = Movie.class))})})
+    List<Movie> getMovieForGenre(@Parameter(description = "genre to be searched (Action, Drama, Adventure)") @PathVariable String genre) {
         return movieService.getMovieForGenre(genre);
-
     }
 
     /**
@@ -82,9 +92,12 @@ public class MovieController {
      * @param movie A movie to create
      * @return A new movie that was created
      */
+
+    @Operation(summary = "Create a new Movie")
+    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Movie created", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = Movie.class))}), @ApiResponse(responseCode = "400", description = "Invalid Movie supplied", content = @Content)})
     @PostMapping("/movies")
     @ResponseStatus(HttpStatus.CREATED)
-    Movie createMovie(@RequestBody Movie movie) {
+    Movie createMovie(@Parameter(description = "Movie to be created") @RequestBody Movie movie) {
         return movieService.createMovie(movie);
     }
 
@@ -103,8 +116,11 @@ public class MovieController {
      * @param id       a unique identifier for the movie
      * @return An updated movie
      */
+
+    @Operation(summary = "Update a movie")
+    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Movie updated", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = Movie.class))}), @ApiResponse(responseCode = "400", description = "Invalid Movie supplied", content = @Content), @ApiResponse(responseCode = "404", description = "No movie found with id", content = @Content)})
     @PatchMapping("/movies/{id}")
-    Movie updateMovie(@RequestBody Movie newMovie, @PathVariable Long id) {
+    Movie updateMovie(@Parameter(description = "Movie with new attributes to be updated") @RequestBody Movie newMovie, @Parameter(description = "id of movie to be updated") @PathVariable Long id) {
         return this.movieService.updateMovie(newMovie, id);
     }
 
@@ -118,8 +134,10 @@ public class MovieController {
      *
      * @param id A unique identifier for the movie
      */
+    @Operation(summary = "Delete a movie")
+    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Movie deleted", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = Movie.class))}), @ApiResponse(responseCode = "404", description = "No movie found with id", content = @Content)})
     @DeleteMapping("/movies/{id}")
-    void deleteMovie(@PathVariable Long id) {
+    void deleteMovie(@Parameter(description = "id of movie to be deleted") @PathVariable Long id) {
         this.movieService.deleteMovie(id);
     }
 }
