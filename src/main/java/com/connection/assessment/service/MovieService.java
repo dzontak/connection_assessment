@@ -33,6 +33,12 @@ public class MovieService {
     @Autowired
     MovieRepository movieRepository;
 
+    /**
+     * Create a new move
+     *
+     * @param movie A new movie
+     * @return A created {@code Movie}
+     */
     public Movie createMovie(Movie movie) {
         logger.info("Post movie: " + movie);
         if (!CollectionUtils.isEmpty(movie.getGenres())) {
@@ -79,7 +85,7 @@ public class MovieService {
      * Update a movie
      *
      * @param newMovie A movie with updated attributes
-     * @param id       A unique identifer of the movie to update
+     * @param id       A unique identifier of the movie to update
      * @return An updated movie
      */
     public Movie updateMovie(Movie newMovie, Long id) {
