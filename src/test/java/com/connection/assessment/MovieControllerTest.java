@@ -1,12 +1,18 @@
 package com.connection.assessment;
 
 
+import com.connection.assessment.model.entity.Actor;
+import com.connection.assessment.model.entity.Director;
+import com.connection.assessment.model.entity.Genre;
 import com.connection.assessment.model.entity.Movie;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -83,6 +89,31 @@ public class MovieControllerTest extends AbstractTest {
         Movie movie = new Movie();
         movie.setTitle("Test Title");
         movie.setReleaseYear(2022);
+        movie.setMovieRank(1);
+        movie.setDescription("Test Description");
+        movie.setRuntime(111);
+        movie.setRating(9.1);
+        movie.setRevenue(1.1);
+        movie.setMetaScore(77);
+
+        Genre actionGenre = new Genre();
+        actionGenre.setCode("Action");
+        List<Genre> genres = new ArrayList<>();
+        genres.add(actionGenre);
+        movie.setGenres(genres);
+
+        Director director = new Director();
+        director.setName("Test Director");
+
+        movie.setDirector(director);
+
+
+        Actor actor = new Actor();
+        actor.setName("Test Actor");
+        List<Actor> actors = new ArrayList<>();
+        actors.add(actor);
+        movie.setActors(actors);
+
 
         String inputJson = super.mapToJson(movie);
         MvcResult mvcResult = mvc.perform(MockMvcRequestBuilders.patch(uri)
@@ -94,6 +125,16 @@ public class MovieControllerTest extends AbstractTest {
         Movie response = super.mapFromJson(content, Movie.class);
         assertEquals(movie.getTitle(), response.getTitle());
         assertEquals(movie.getReleaseYear(), response.getReleaseYear());
+        assertEquals(movie.getMovieRank(), response.getMovieRank());
+        assertEquals(movie.getDescription(), response.getDescription());
+        assertEquals(movie.getRuntime(), response.getRuntime());
+        assertEquals(movie.getRating(), response.getRating());
+        assertEquals(movie.getRevenue(), response.getRevenue());
+        assertEquals(movie.getMetaScore(), response.getMetaScore());
+        assertEquals(movie.getGenres().get(0).getCode(), response.getGenres().get(0).getCode());
+        assertEquals(movie.getDirector().getName(), response.getDirector().getName());
+        assertEquals(movie.getActors().get(0).getName(), response.getActors().get(0).getName());
+
     }
 
 

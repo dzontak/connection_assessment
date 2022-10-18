@@ -74,6 +74,7 @@ public class ConnectionAssessmentApplication {
                 String[] actors = record.get("Actors").split(",");
                 List<Actor> movieActors = new ArrayList<>();
                 for (String name : actors) {
+                    name = name.trim();
                     Actor actor = actorRepository.findByName(name);
                     if (actor == null) {
                         actor = new Actor();
